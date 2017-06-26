@@ -47,7 +47,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="@color/primary_deshario" />
+            android:background="#736EFE" />
 
     <LinearLayout
         android:id="@+id/col2_inner"
@@ -78,16 +78,35 @@
                 android:layout_height="wrap_content"
                 android:text="Deshario Sunil"
                 android:textSize="22sp"
-                android:textColor="@color/default_bootstrap" />
+                android:textColor="@color/default_bootstrap"/>
 
-            <TextView
-                android:layout_marginTop="5dp"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Student"
-                android:textSize="18sp"
-                android:background="@drawable/rounded_corner"
-                android:textColor="@color/default_bootstrap" />
+                android:orientation="horizontal"
+                android:paddingLeft="-5dp">
+
+                <!--<TextView-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Student"-->
+                    <!--android:textSize="18sp"-->
+                    <!--android:background="@drawable/rounded_corner"-->
+                    <!--android:textColor="@color/default_bootstrap" />-->
+
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Blood : AB+"
+                    android:textSize="18sp"
+                    android:background="@drawable/rounded_corner"
+                    android:textColor="@color/default_bootstrap" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
@@ -113,8 +132,7 @@
             android:background="@color/primary_deshario"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="Donate" />
-
+            android:text="Donate"/>
 
         <Button
             android:id="@+id/request"
@@ -124,8 +142,7 @@
             android:background="@color/colorAccent"
             android:text="Request"
             android:textColor="@color/default_bootstrap"
-            android:textSize="16sp" />
-
+            android:textSize="16sp"/>
 
     </LinearLayout>
 

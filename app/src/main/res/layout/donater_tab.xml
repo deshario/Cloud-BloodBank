@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--<android.support.v7.widget.Toolbar-->
+    <!--android:id="@+id/my_toolbar"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="?attr/actionBarSize"-->
+    <!--android:background="?attr/colorPrimary"-->
+    <!--app:titleTextColor="@android:color/white"-->
+    <!--android:theme="@style/ThemeOverlay.AppCompat.ActionBar"-->
+    <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>-->
+
+    <!--<com.miguelcatalan.materialsearchview.MaterialSearchView-->
+    <!--android:id="@+id/search_view"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--app:searchBackground="@color/success_bootstrap"-->
+    <!--app:searchSuggestionBackground="@color/colorPrimary"-->
+    <!--app:searchCloseIcon="@drawable/ic_action_navigation_close_inverted"-->
+    <!--app:searchBackIcon="@drawable/ic_action_navigation_arrow_back_inverted"-->
+    <!--app:searchSuggestionIcon="@drawable/ic_suggestion"-->
+    <!--android:textColor="@color/white"-->
+    <!--android:textColorHint="@color/f8"-->
+    <!--android:hint="ค้นหาอาจารย์"-->
+    <!--/>-->
+
+    <LinearLayout
+        android:id="@+id/col1"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@drawable/rounded"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+        <TextView
+            android:layout_marginTop="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search Donater"
+            android:textColor="@color/default_bootstrap"
+            android:textSize="22sp"/>
+
+        <EditText
+            android:layout_marginTop="15dp"
+            android:background="@drawable/edittext_success_border"
+            android:id="@+id/date_guess"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint=" "
+            android:paddingLeft="10dp"
+            android:singleLine="true"
+            android:inputType="number"
+            android:focusable="false"
+            android:textIsSelectable="true"
+            android:drawableLeft="@drawable/ic_info_outline_black_36dp"
+            />
+
+
+
+    </LinearLayout>
+
+    <ListView
+        android:layout_below="@+id/col1"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/list_view"
+        android:background="@color/white"/>
+
+
+</RelativeLayout>

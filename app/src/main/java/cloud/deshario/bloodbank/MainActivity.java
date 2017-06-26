@@ -1,12 +1,17 @@
 package cloud.deshario.bloodbank;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.github.javiersantos.bottomdialogs.BottomDialog;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,13 +35,23 @@ public class MainActivity extends AppCompatActivity {
         request_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this,"Request in process !",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this,"Request in process !",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity.this,Donatertab.class));
             }
         });
         campagin_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this,"Searching Campaign ...",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this,"Searching Campaign ...",Toast.LENGTH_SHORT).show();
+
+                BottomDialog bottomDialog = new BottomDialog.Builder(MainActivity.this)
+                        .setTitle("No Campaign Available Yet !")
+                        .setContent("We will inform you when campaign are ready.")
+                        .setPositiveText("OK")
+                        //.setCustomView(customView, 0, 0, 0, 0)
+                        .build();
+
+                bottomDialog.show();
             }
         });
     }
