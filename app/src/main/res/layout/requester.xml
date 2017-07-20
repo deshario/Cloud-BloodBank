@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:dots="http://schemas.android.com/tools"
+    android:background="@color/material_purple">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/transparent"
+        app:titleTextColor="@android:color/white"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Searching Donor"
+            android:textSize="22sp"
+            android:layout_gravity="center"
+            android:id="@+id/toolbar_title"
+            android:textColor="@color/default_bootstrap"/>
+
+    </android.support.v7.widget.Toolbar>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/dark_gray"
+        android:layout_below="@+id/my_toolbar"/>
+
+    <LinearLayout
+        android:id="@+id/donors_not_found"
+        android:visibility="invisible"
+        android:layout_below="@+id/line"
+        android:layout_above="@+id/bottom_linear"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/retry"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/retry"
+            app:civ_border_color="@color/dark_gray"
+            app:civ_border_width="4dp"
+            app:civ_shadow="true"
+            app:civ_shadow_radius="10"
+            app:civ_shadow_color="#8BC34A"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Retry"
+            android:textSize="20sp"
+            android:textColor="@color/default_bootstrap"
+            />
+
+    </LinearLayout>
+
+    <pl.bclogic.pulsator4droid.library.PulsatorLayout
+        android:id="@+id/pulsator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        app:pulse_count="4"
+        app:pulse_duration="4000"
+        app:pulse_repeat="0"
+        app:pulse_color="@color/default_bootstrap"
+        app:pulse_startFromScratch="true"
+        app:pulse_interpolator="Decelerate">
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/profile"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/user_male"
+            app:civ_border_color="@color/dark_gray"
+            android:layout_centerInParent="true"
+            app:civ_border_width="4dp"
+            app:civ_shadow="true"
+            app:civ_shadow_radius="10"
+            app:civ_shadow_color="#8BC34A"/>
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/foundDevice"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_above="@id/profile"
+            android:layout_toLeftOf="@id/profile"
+            android:layout_marginRight="6dp"
+            android:src="@drawable/guest"
+            android:visibility="invisible"
+            app:civ_border_width="4dp"
+            app:civ_shadow="true"
+            app:civ_shadow_radius="10"
+            app:civ_shadow_color="#8BC34A"/>
+
+
+        <!--<ImageView-->
+            <!--android:id="@+id/profile"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:src="@drawable/user_male"-->
+            <!--android:scaleType="centerCrop"-->
+            <!--android:background="@drawable/pulse_img_bg"/>-->
+
+
+    </pl.bclogic.pulsator4droid.library.PulsatorLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom_linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:padding="10dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/found"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_states"
+            android:text="Deep Search"
+            android:textColor="@color/default_bootstrap"
+            android:textSize="14dp"
+            android:layout_weight=".50"
+            />
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_marginLeft="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_states"
+            android:text="Cancel "
+            android:textColor="@color/default_bootstrap"
+            android:textSize="14dp"
+            android:layout_weight=".50"
+            />
+
+    </LinearLayout>
+
+
+    <com.github.glomadrian.grav.GravView
+        android:id="@+id/grav"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        app:colorGenerator="com.github.glomadrian.grav.generator.paint.ArrayColorGenerator"
+        app:array_colors="@array/bubble"
+        app:pointGenerator="com.github.glomadrian.grav.generator.point.RegularPointGenerator"
+        app:regular_cell_size="300"
+        app:regular_variance="200"
+        app:gravGenerator="com.github.glomadrian.grav.generator.grav.BallGenerator"
+        app:ball_from_size="10dp"
+        app:ball_to_size="5dp"
+        app:animationGenerators="@array/BubbleAnimations"
+        app:side_to_side_min_duration="10000"
+        app:side_to_side_max_duration="10000"
+        app:side_to_side_direction="leftToRight"
+        app:shake_direction="vertical"
+        app:shake_min_duration="10000"
+        app:shake_max_duration="20000"
+        app:shake_variance="500dp"
+        />
+
+
+</RelativeLayout>

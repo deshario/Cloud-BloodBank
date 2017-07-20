@@ -1,59 +1,155 @@
 package cloud.deshario.bloodbank;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
+
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+
+import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
 /**
  * Created by Deshario on 6/26/2017.
  */
 
 public class Donatertab extends AppCompatActivity {
-    ListView listview;
-    List<HashMap<String, String>> datalist;
-    SimpleAdapter simpleAdapter;
-    ImageView info_donater;
+
+    private PulsatorLayout mPulsator;
+    Toolbar myToolbar;
+    Button btn_found,btn_cancel;
+    CircularImageView cm_profile;
+    CircularImageView retry_img;
+    private CircularImageView foundDevice;
+    LinearLayout noDonors;
+    Handler handler = new Handler();
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.donater_tab);
-        listview = (ListView)findViewById(R.id.list_view);
+        setContentView(R.layout.requester);
 
-        dowork();
-        info_donater = (ImageView)findViewById(R.id.info);
+        btn_found = (Button)findViewById(R.id.found);
+        btn_cancel = (Button)findViewById(R.id.cancel);
+        cm_profile = (CircularImageView)findViewById(R.id.profile);
+        foundDevice = (CircularImageView)findViewById(R.id.foundDevice);
+        retry_img = (CircularImageView)findViewById(R.id.retry);
+        noDonors = (LinearLayout)findViewById(R.id.donors_not_found);
 
+        myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        //getSupportActionBar().setTitle("Searching...");
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        myToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+
+        mPulsator = (PulsatorLayout) findViewById(R.id.pulsator);
+        mPulsator.start();
+
+        retry_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Animation animation1 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
+                retry_img.startAnimation(animation1);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        re_search();
+                    }
+                },3000);
+            }
+        });
+
+        btn_found.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(Donatertab.this,"Deep Search Activated !",Toast.LENGTH_SHORT).show();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        foundDevice();
+                    }
+                },3000);
+            }
+        });
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //myToolbar.getMenu().clear();
+                stop_searching();
+            }
+        });
     }
 
-    public void dowork(){
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.donater_menu, menu);
+        return true;
+    }
 
-        datalist = new ArrayList<HashMap<String, String>>();
-
-        for (int i = 0; i < 10; i++) {
-            HashMap<String, String> hm = new HashMap<String, String>();
-            hm.put("teacher_name", "Donater "+(i+1));
-            hm.put("teacher_name", "Donater "+(i+1));
-            hm.put("teacher_faculty", "Bloodgroup : "+(i+1));
-            hm.put("teacher_img",String.valueOf(R.drawable.user_male));
-            hm.put("teacher_id",""+i);
-            datalist.add(hm);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
         }
+        return super.onOptionsItemSelected(item);
+    }
 
-        String[] from = {"teacher_img", "teacher_name", "teacher_faculty"};
-        int[] to = {R.id.listview_image, R.id.listview_item_title, R.id.listview_item_short_description};
-
-        simpleAdapter = new SimpleAdapter(this, datalist, R.layout.teachers_custom_listview, from, to);
-        listview.setAdapter(simpleAdapter);
-
+    public void stop_searching(){
+        if(mPulsator.isStarted()){
+            mPulsator.stop();
+        }
+        cm_profile.setVisibility(View.GONE);
+        noDonors.setVisibility(View.VISIBLE);
+        ObjectAnimator anim = ObjectAnimator.ofFloat(noDonors, "alpha", 0f, 1f);
+        anim.setDuration(1000);
+        anim.start();
 
     }
+
+    private void re_search(){
+        mPulsator.start();
+        noDonors.setVisibility(View.GONE);
+        cm_profile.setVisibility(View.VISIBLE);
+        ObjectAnimator anim = ObjectAnimator.ofFloat(cm_profile, "alpha", 0f, 1f);
+        anim.setDuration(1000);
+        anim.start();
+    }
+
+    private void foundDevice(){
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.setDuration(400);
+        animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
+        ArrayList<Animator> animatorList=new ArrayList<Animator>();
+        ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(foundDevice, "ScaleX", 0f, 1.2f, 1f);
+        animatorList.add(scaleXAnimator);
+        ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(foundDevice, "ScaleY", 0f, 1.2f, 1f);
+        animatorList.add(scaleYAnimator);
+        animatorSet.playTogether(animatorList);
+        foundDevice.setVisibility(View.VISIBLE);
+        animatorSet.start();
+    }
+
+
 }
