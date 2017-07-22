@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         donate_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //alert_dialog();
+               startActivity(new Intent(MainActivity.this,TABBAR.class));
             }
         });
         request_btn.setOnClickListener(new View.OnClickListener() {

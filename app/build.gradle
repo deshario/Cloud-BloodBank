@@ -33,5 +33,6 @@ dependencies {
     compile 'pl.bclogic:pulsator4droid:1.0.3' // radar animation
     compile 'com.github.glomadrian:Grav:1.1' // Snowfall animations
     compile 'com.mikhaellopez:circularimageview:3.0.2' // circular imageview
+    compile 'devlight.io:navigationtabbar:1.2.5'
     testCompile 'junit:junit:4.12'
 }
