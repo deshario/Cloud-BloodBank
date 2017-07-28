@@ -1,5 +1,6 @@
 package cloud.deshario.bloodbank;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -32,7 +33,8 @@ public class MainActivity extends AppCompatActivity {
         donate_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               startActivity(new Intent(MainActivity.this,TABBAR.class));
+                //alert();
+                startActivity(new Intent(MainActivity.this,TABBAR.class));
             }
         });
         request_btn.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +101,22 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void alert(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle("หัวข้อใส่ตรงนี้");
+        alertDialogBuilder
+                .setMessage("ใส่ข้อมูลตรงนี้")
+                .setCancelable(true)
+                .setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
 }

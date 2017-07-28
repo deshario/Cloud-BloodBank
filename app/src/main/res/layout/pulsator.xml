@@ -20,12 +20,14 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <SeekBar
                 android:id="@+id/seek_count"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:max="9"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -34,6 +36,7 @@
                 android:text="label_count"
                 tools:ignore="RelativeOverlap"
                 android:layout_toLeftOf="@id/seek_count" />
+
             <TextView
                 android:id="@+id/text_count"
                 android:layout_width="wrap_content"
@@ -41,6 +44,7 @@
                 android:layout_toEndOf="@id/seek_count"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@id/seek_count" />
+
         </RelativeLayout>
 
         <RelativeLayout
