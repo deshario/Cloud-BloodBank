@@ -14,7 +14,7 @@
             android:id="@+id/top_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/primary_deshario"
+            android:background="@color/material_red"
             app:titleTextColor="@android:color/white"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
@@ -32,7 +32,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/primary_deshario"
+            android:background="@color/material_red"
             app:titleTextColor="@android:color/white"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:popupTheme="@style/AppTheme.AppBarOverlay">
@@ -43,11 +43,11 @@
                 android:layout_height="50dp"
                 app:ntb_animation_duration="400"
                 app:ntb_preview_colors="@array/red_wine"
-                app:ntb_corners_radius="25dp"
+                app:ntb_corners_radius="4dp"
                 app:ntb_scaled="false"
-                app:ntb_active_color="@color/primary_deshario"
+                app:ntb_active_color="@color/material_red"
                 app:ntb_inactive_color="@color/default_bootstrap"
-                app:ntb_bg_color="@color/primary_deshario"/>
+                app:ntb_bg_color="@color/material_red"/>
 
 
         </android.support.v7.widget.Toolbar>
@@ -66,9 +66,17 @@
         android:fitsSystemWindows="true"
         tools:openDrawer="end">
 
-        <include
+        <FrameLayout
             android:id="@+id/container"
-            layout="@layout/content_main" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include
+                layout="@layout/content_main" />
+
+        </FrameLayout>
+
+
 
         <android.support.design.widget.NavigationView
             android:id="@+id/navigation_view"
@@ -76,7 +84,9 @@
             android:layout_width="wrap_content"
             android:layout_gravity="end"
             app:headerLayout="@layout/navigation_header"
-            app:menu="@menu/menu_navigation"/>
+            app:menu="@menu/menu_navigation"
+            app:itemIconTint="@color/f8"
+            app:itemTextColor="@color/f8"/>
 
     </android.support.v4.widget.DrawerLayout>
 

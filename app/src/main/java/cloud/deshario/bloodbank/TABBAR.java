@@ -10,7 +10,10 @@ import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.v4.graphics.ColorUtils;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -19,9 +22,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +33,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Random;
 
+import cloud.deshario.bloodbank.Fragments.BlankFragment;
+import cloud.deshario.bloodbank.Fragments.TestFragment;
 import devlight.io.library.ntb.NavigationTabBar;
 
 /**
@@ -44,10 +48,22 @@ public class TABBAR extends AppCompatActivity {
     private Toolbar toolbar,toptoolbar;
     private EndDrawerToggle drawerToggle;
 
+    Fragment fragment_to_open;
+    FragmentManager mFragmentManager;
+    FragmentTransaction mFragmentTransaction;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.deshario_main);
+
+        mFragmentManager = getSupportFragmentManager();
+        mFragmentTransaction = mFragmentManager.beginTransaction();
+        mFragmentTransaction.replace(R.id.container, new TestFragment());
+        mFragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        //mFragmentTransaction.addToBackStack(null); //You don't have to add ft.addToBackStack(null); while adding first fragment.
+        mFragmentTransaction.commit();
 
         toptoolbar = (Toolbar) findViewById(R.id.top_toolbar);
         toptoolbar.inflateMenu(R.menu.main_menu);//changed
@@ -60,7 +76,8 @@ public class TABBAR extends AppCompatActivity {
                     drawerLayout.closeDrawer(GravityCompat.END);
                 }
                 if(menu.getItemId() == R.id.opt_menu){
-                    Toast.makeText(TABBAR.this,"action_info",Toast.LENGTH_LONG).show();
+                    //Toast.makeText(TABBAR.this,"action_info",Toast.LENGTH_LONG).show();
+                    MainActivity.alert(TABBAR.this);
                 }
                 return false;
             }
@@ -73,12 +90,15 @@ public class TABBAR extends AppCompatActivity {
         initNavigationDrawer();
     }
 
+
     private void initUI() {
        navigationTabBar = (NavigationTabBar) findViewById(R.id.ntb_sample_5);
         final ArrayList<NavigationTabBar.Model> models5 = new ArrayList<>();
+
+
         models5.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp), Color.WHITE
+                        getResources().getDrawable(R.drawable.ic_dashboard_white_24dp), Color.WHITE
                 ).build()
         );
         models5.add(
@@ -94,6 +114,7 @@ public class TABBAR extends AppCompatActivity {
         models5.add(
                 new NavigationTabBar.Model.Builder(
                         getResources().getDrawable(R.drawable.ic_person_outline_white_24dp), Color.WHITE
+//                        setTint( getResources().getDrawable(R.drawable.ic_info_outline_black_36dp), Color.BLACK), Color.RED
                 ).build()
         );
         navigationTabBar.setModels(models5);
@@ -101,16 +122,42 @@ public class TABBAR extends AppCompatActivity {
         navigationTabBar.setOnTabBarSelectedIndexListener(new NavigationTabBar.OnTabBarSelectedIndexListener() {
             @Override
             public void onStartTabSelected(final NavigationTabBar.Model model, final int index) {
-
+                if(drawerLayout.isDrawerOpen(GravityCompat.END)){
+                    drawerLayout.closeDrawer(GravityCompat.END);
+                }
+                int page = index;
+                FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+                switch(page){
+                    case 0:
+                        fragment_to_open = new TestFragment();
+                        break;
+                    case 1:
+                        fragment_to_open = new BlankFragment();
+                        break;
+                    case 2:
+                        fragment_to_open = new BlankFragment();
+                        break;
+                    case 3:
+                        fragment_to_open = new BlankFragment();
+                        break;
+                    default:
+                }
+                if(fragment_to_open != null){
+                    fragmentTransaction.replace(R.id.container, fragment_to_open);
+                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
             }
 
             @Override
             public void onEndTabSelected(final NavigationTabBar.Model model, final int index) {
-                Toast.makeText(TABBAR.this, String.format("Tab :: %d", index), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(TABBAR.this,"onEndTabSelected :: "+index,Toast.LENGTH_SHORT).show();
             }
         });
 
     }
+
 
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
@@ -212,4 +259,12 @@ public class TABBAR extends AppCompatActivity {
         Drawable drawable = new BitmapDrawable(getResources(), bmpResult);
         return drawable;
     }
+
+    public static Drawable setTint(Drawable d, int color) {
+        Drawable wrappedDrawable = DrawableCompat.wrap(d);
+        DrawableCompat.setTint(wrappedDrawable, color);
+        return wrappedDrawable;
+    }
+
+
 }

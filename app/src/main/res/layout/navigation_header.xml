@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:paddingTop="20dp"
     android:paddingBottom="20dp"
-    android:background="@color/primary_deshario"
+    android:background="@color/material_red"
     android:layout_width="match_parent"
     android:layout_height="190dp">
 

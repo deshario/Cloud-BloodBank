@@ -6,7 +6,7 @@
         <!--/>-->
 
     <!--<solid android:color="@android:color/transparent" />-->
-    <solid android:color="@color/danger_bootstrap"/>
+    <solid android:color="@color/material_red"/>
 
 
 

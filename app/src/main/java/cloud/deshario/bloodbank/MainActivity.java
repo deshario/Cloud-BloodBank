@@ -1,20 +1,28 @@
 package cloud.deshario.bloodbank;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.github.javiersantos.bottomdialogs.BottomDialog;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
         donate_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //alert();
                 startActivity(new Intent(MainActivity.this,TABBAR.class));
             }
         });
@@ -46,13 +53,7 @@ public class MainActivity extends AppCompatActivity {
         campagin_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BottomDialog bottomDialog = new BottomDialog.Builder(MainActivity.this)
-                        .setTitle("No Campaign Available Yet !")
-                        .setContent("We will inform you when campaign are ready.")
-                        .setPositiveText("OK")
-                        //.setCustomView(customView, 0, 0, 0, 0)
-                        .build();
-                bottomDialog.show();
+                alert(MainActivity.this);
             }
         });
     }
@@ -103,20 +104,44 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void alert(){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setTitle("หัวข้อใส่ตรงนี้");
-        alertDialogBuilder
-                .setMessage("ใส่ข้อมูลตรงนี้")
-                .setCancelable(true)
-                .setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+    public static void alert(Context context){
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.layout_bottom, null);
+        //Spinner spin1 = (Spinner) view.findViewById(R.id.spin1);
+        //Spinner spin2 = (Spinner) view.findViewById(R.id.spin2);
+        // ListView catList = (ListView) view.findViewById(R.id.listItems);
+        //Button btnDone = (Button) view.findViewById(R.id.btnDone);
+        Button btnok = (Button) view.findViewById(R.id.ok_btn);
 
-                    }
-                });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        final Dialog mBottomSheetDialog = new Dialog(context, R.style.MaterialDialogSheet);
+        mBottomSheetDialog.setContentView(view);
+        mBottomSheetDialog.setCancelable(true);
+        mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
+        mBottomSheetDialog.show();
+
+        String[] FRUITS = { "Apple", "Avocado", "Banana",
+                "Blueberry", "Coconut", "Durian", "Guava", "Kiwifruit",
+                "Jackfruit", "Mango", "Olive", "Pear", "Sugar-apple" };
+
+        //spin1.setAdapter(new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_dropdown_item_1line, FRUITS));
+        //spin2.setAdapter(new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_dropdown_item_1line, FRUITS));
+        ArrayAdapter adapter = new ArrayAdapter<String>(context,android.R.layout.simple_list_item_1, FRUITS);
+        //catList.setAdapter(adapter);
+
+        btnok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBottomSheetDialog.dismiss();
+            }
+        });
+
+// btnDone.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mBottomSheetDialog.dismiss();
+//            }
+//        });
     }
 
 }
