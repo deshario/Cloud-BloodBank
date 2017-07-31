@@ -15,26 +15,19 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import cloud.deshario.bloodbank.Fragments.BlankFragment;
-import cloud.deshario.bloodbank.Fragments.TestFragment;
+import cloud.deshario.bloodbank.Fragments.NewRequest_Frag;
+import cloud.deshario.bloodbank.Fragments.Timeline_Frag;
 import devlight.io.library.ntb.NavigationTabBar;
 
 /**
@@ -60,7 +53,7 @@ public class TABBAR extends AppCompatActivity {
 
         mFragmentManager = getSupportFragmentManager();
         mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.replace(R.id.container, new TestFragment());
+        mFragmentTransaction.replace(R.id.container, new Timeline_Frag());
         mFragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         //mFragmentTransaction.addToBackStack(null); //You don't have to add ft.addToBackStack(null); while adding first fragment.
         mFragmentTransaction.commit();
@@ -129,10 +122,10 @@ public class TABBAR extends AppCompatActivity {
                 FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
                 switch(page){
                     case 0:
-                        fragment_to_open = new TestFragment();
+                        fragment_to_open = new Timeline_Frag();
                         break;
                     case 1:
-                        fragment_to_open = new BlankFragment();
+                        fragment_to_open = new NewRequest_Frag();
                         break;
                     case 2:
                         fragment_to_open = new BlankFragment();
@@ -246,7 +239,25 @@ public class TABBAR extends AppCompatActivity {
             drawerLayout.closeDrawer(GravityCompat.END);
         }else{
             super.onBackPressed();
+            boolean status = clearBackStack();
+            if(status == true){
+                //System.out.println("ready to close");
+            }
         }
+    }
+
+    private boolean clearBackStack(){
+        boolean status = false;
+        navigationTabBar.setModelIndex(0, true);
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager.getBackStackEntryCount() == 0) {
+            status = true;
+        }
+        while(fragmentManager.getBackStackEntryCount() != 0) {
+            fragmentManager.popBackStackImmediate();
+            //status = false;
+        }
+        return status;
     }
 
     private Drawable rotateDrawable(@DrawableRes int resId, int degree){

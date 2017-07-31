@@ -6,9 +6,9 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorControlNormal">@color/colorAccent</item> <!-- TextInputLayout -->
+        <item name="colorControlActivated">@color/primary_deshario</item> <!-- TextInputLayout -->
     </style>
-
-
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorPrimary">@color/colorPrimary</item> <!-- This is the primary color of your app, it is used for the ActionBar/Toolbar for example. -->

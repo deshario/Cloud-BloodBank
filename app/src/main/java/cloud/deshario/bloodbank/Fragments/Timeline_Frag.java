@@ -3,7 +3,7 @@ package cloud.deshario.bloodbank.Fragments;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -15,8 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,19 +23,17 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import cloud.deshario.bloodbank.Adapters.RequestAdapter;
-import cloud.deshario.bloodbank.Donatertab;
-import cloud.deshario.bloodbank.MainActivity;
+import cloud.deshario.bloodbank.Adapters.TimelineAdapter;
 import cloud.deshario.bloodbank.Models.Requester;
 import cloud.deshario.bloodbank.R;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TestFragment extends Fragment {
+public class Timeline_Frag extends Fragment {
 
 
-    public TestFragment(){}
+    public Timeline_Frag(){}
 
 
     @Override
@@ -50,7 +46,7 @@ public class TestFragment extends Fragment {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
 
-        RequestAdapter ca = new RequestAdapter(createList(2));
+        TimelineAdapter ca = new TimelineAdapter(createList(2));
         recyclerView.setAdapter(ca);
         int resId = R.anim.layout_animation_fall_down;
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), resId);

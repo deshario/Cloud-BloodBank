@@ -5,27 +5,29 @@ package cloud.deshario.bloodbank.Adapters;
  */
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
 
-import cloud.deshario.bloodbank.Fragments.TestFragment;
+import cloud.deshario.bloodbank.Fragments.Timeline_Frag;
 import cloud.deshario.bloodbank.Models.Requester;
 import cloud.deshario.bloodbank.R;
 
-public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ContactViewHolder> {
+public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ContactViewHolder> {
 
     private List<Requester> contactList;
     Context context;
 
-    public RequestAdapter(List<Requester> contactList) {
+    public TimelineAdapter(List<Requester> contactList) {
         this.contactList = contactList;
     }
 
@@ -52,7 +54,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ContactV
 
     @Override
     public ContactViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.mycardview, viewGroup, false);
+        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.main_timeline, viewGroup, false);
         context = viewGroup.getContext();
         return new ContactViewHolder(itemView);
     }
@@ -88,7 +90,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ContactV
                 public void onClick(View v) {
                     int itemPosition = getPosition();
                     Requester requester = getItem(itemPosition);
-                    TestFragment.alert(context,requester);
+                    Timeline_Frag.alert(context,requester);
                 }
             });
 
@@ -98,7 +100,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ContactV
                     int itemPosition = getPosition();
                     Requester requester = getItem(itemPosition);
                     //Toast.makeText(context,"Image "+requester.getRequester_location()+" : Loading",Toast.LENGTH_SHORT).show();
-                    TestFragment.show_image(context,requester);
+                    Timeline_Frag.show_image(context,requester);
                 }
             });
 
