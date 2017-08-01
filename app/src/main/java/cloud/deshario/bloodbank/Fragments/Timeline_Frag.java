@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -101,6 +102,8 @@ public class Timeline_Frag extends Fragment {
         dialog.show();
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
+        Button img_btn = (Button)view.findViewById(R.id.select_image);
+        img_btn.setVisibility(View.GONE);
         final TextView title = (TextView)view.findViewById(R.id.img_title);
         title.setText(requester.getRequester_reason());
         ImageButton img = (ImageButton)view.findViewById(R.id.close_modal);
