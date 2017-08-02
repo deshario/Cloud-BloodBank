@@ -9,8 +9,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -33,6 +38,8 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.InputStream;
 
+import cloud.deshario.bloodbank.AbsRuntimePermission;
+import cloud.deshario.bloodbank.MainActivity;
 import cloud.deshario.bloodbank.R;
 
 /**
@@ -42,8 +49,6 @@ public class NewRequest_Frag extends Fragment {
 
     EditText user,email,loc,age,image_field;
     Button btn_request,sel_img_btn;
-
-    boolean permission = false;
 
 
     public NewRequest_Frag() {
@@ -56,6 +61,10 @@ public class NewRequest_Frag extends Fragment {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.CAMERA
     };
+    private static final int REQUEST_PERMISSION = 10;
+    private static final int STORAGE_PERMISSION_CODE = 101;
+    private static final int MY_PERMISSION_REQUEST_COARSE_LOCATION = 102;
+    private boolean permissionIsGranted = false;
 
 
     @Override
@@ -123,7 +132,8 @@ public class NewRequest_Frag extends Fragment {
         sel_img_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectImage(context);
+                permission_work(getActivity());
+                //selectImage(context);
                 //Toast.makeText(context,"Select Image",Toast.LENGTH_SHORT).show();
             }
         });
@@ -138,83 +148,146 @@ public class NewRequest_Frag extends Fragment {
         });
     }
 
-    // Select image from camera and gallery
-    private void selectImage(final Context context) {
-        ImageView imageview;
-        Button btnSelectImage;
-        Bitmap bitmap;
-        File destination = null;
-        InputStream inputStreamImg;
-        String imgPath = null;
-        int sel = 0;
 
-        final int PICK_IMAGE_CAMERA = 1, PICK_IMAGE_GALLERY = 2;
-        try {
-            PackageManager pm = context.getPackageManager();
-//            int hasPerm = pm.checkPermission(Manifest.permission.CAMERA, context.getPackageName());
-            boolean hasPerm = verifyStoragePermissions(getActivity());
-//            if (hasPerm == PackageManager.PERMISSION_GRANTED) {
-            if (hasPerm == true) {
-                final CharSequence[] options = {"Take Photo", "Choose From Gallery"};
-               AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle("Select Option");
-                builder.setSingleChoiceItems(options, -1, new DialogInterface.OnClickListener(){
-                    public void onClick(DialogInterface dialog, int item) {
-                        ListView lv = ((AlertDialog)dialog).getListView();
-                        lv.setTag(new Integer(item));
-                    }
-                });
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ListView lv = ((AlertDialog)dialog).getListView();
-                        Integer selected = (Integer)lv.getTag();
-                        if(selected != null) {
-                            if(selected == 0){
-                                dialog.dismiss();
-                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                startActivityForResult(intent, PICK_IMAGE_CAMERA);
-                            }else if(selected == 1){
-                                dialog.dismiss();
-                                Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                startActivityForResult(pickPhoto, PICK_IMAGE_GALLERY);
-                            }else{
-                                dialog.dismiss();
-                            }
-                        }else{ // Null
-                           // Toast.makeText(context,"selected = "+selected,Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-
-                builder.show();
-            } else{
-                Toast.makeText(context, "Camera Permission error", Toast.LENGTH_SHORT).show();
+    private void permission_work(Context context){
+        boolean android_version = version_android();
+        if(android_version == true){ // Android >= MARSHMALLOW
+            boolean access = checkPermission(context,PERMISSIONS_STORAGE[1]);
+            if(access == true){ // If Permission Granted
+                Toast.makeText(context,"Permission Already Granted",Toast.LENGTH_SHORT).show();
+            }else{ // Ask Permission
+                request(context);
             }
-        } catch (Exception e) {
-            Toast.makeText(context, "Camera Permission error", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
+        }else{
+            Toast.makeText(context, "Version > Marshmallow", Toast.LENGTH_SHORT).show();
+            permissionIsGranted = true;
         }
     }
+    // Select image from camera and gallery
+//    private void selectImage(final Context context) {
+//        ImageView imageview;
+//        Button btnSelectImage;
+//        Bitmap bitmap;
+//        File destination = null;
+//        InputStream inputStreamImg;
+//        String imgPath = null;
+//        int sel = 0;
+//
+//        final int PICK_IMAGE_CAMERA = 1, PICK_IMAGE_GALLERY = 2;
+//        try {
+//            PackageManager pm = context.getPackageManager();
+////            int hasPerm = pm.checkPermission(Manifest.permission.CAMERA, context.getPackageName());
+//            boolean hasPerm = verifyStoragePermissions(getActivity());
+////            if (hasPerm == PackageManager.PERMISSION_GRANTED) {
+//            if (hasPerm == true) {
+//                final CharSequence[] options = {"Take Photo", "Choose From Gallery"};
+//               AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//                builder.setTitle("Select Option");
+//                builder.setSingleChoiceItems(options, -1, new DialogInterface.OnClickListener(){
+//                    public void onClick(DialogInterface dialog, int item) {
+//                        ListView lv = ((AlertDialog)dialog).getListView();
+//                        lv.setTag(new Integer(item));
+//                    }
+//                });
+//                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        ListView lv = ((AlertDialog)dialog).getListView();
+//                        Integer selected = (Integer)lv.getTag();
+//                        if(selected != null) {
+//                            if(selected == 0){
+//                                dialog.dismiss();
+//                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                                startActivityForResult(intent, PICK_IMAGE_CAMERA);
+//                            }else if(selected == 1){
+//                                dialog.dismiss();
+//                                Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                                startActivityForResult(pickPhoto, PICK_IMAGE_GALLERY);
+//                            }else{
+//                                dialog.dismiss();
+//                            }
+//                        }else{ // Null
+//                           // Toast.makeText(context,"selected = "+selected,Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+//                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss();
+//                    }
+//                });
+//
+//                builder.show();
+//            } else{
+//                Toast.makeText(context, "Camera Permission error", Toast.LENGTH_SHORT).show();
+//            }
+//        } catch (Exception e) {
+//            Toast.makeText(context, "Camera Permission error", Toast.LENGTH_SHORT).show();
+//            e.printStackTrace();
+//        }
+//    }
 
-    public boolean verifyStoragePermissions(Activity activity) {
-        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (permission != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(
-                    activity,
-                    PERMISSIONS_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE
-            );
+
+
+
+    private void request(Context context){
+        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+    }
+
+    private static boolean version_android(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             return true;
+        }else{
+            return false;
         }
-        return true;
     }
 
+    private static boolean checkPermission(Context context, String permission_name){
+        return ActivityCompat.checkSelfPermission(context, permission_name) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case STORAGE_PERMISSION_CODE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    permissionIsGranted = true;
+                    Toast.makeText(getActivity(),"permission granted",Toast.LENGTH_SHORT).show();
+                } else {
+                    permissionIsGranted = false;
+                    manual_permission(getActivity());
+                }
+                break;
+        }
+    }
+
+    public void manual_permission(Context context){
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        dialog.setTitle("Enable Permission");
+        dialog.setIcon(R.drawable.user_male);
+        dialog.setMessage("Enable Permission Manually From Settings !");
+        dialog.setPositiveButton("Enable", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent i = new Intent();
+                i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                i.setData(Uri.parse("package:" + getActivity().getPackageName()));
+                i.addCategory(Intent.CATEGORY_DEFAULT);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                startActivity(i);
+                dialog.dismiss();
+            }
+        });
+        dialog.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                System.out.println("Dismiss ok");
+            }
+        }).show();
+    }
 
 }
