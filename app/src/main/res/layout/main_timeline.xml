@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     card_view:cardBackgroundColor="@color/default_bootstrap"
-    card_view:cardCornerRadius="10dp"
+    card_view:cardCornerRadius="4dp"
     card_view:cardElevation="2dp"
     card_view:cardMaxElevation="0dp"
     card_view:cardUseCompatPadding="true">
@@ -78,7 +78,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="BloodGroup : "
-                android:drawableLeft="@drawable/ic_verified_user_white_24dp"
                 android:drawableTint="@color/material_red"
                 android:textSize="18sp"
                 android:drawablePadding="5dp"
@@ -103,7 +102,6 @@
                 android:layout_marginTop="8dp"
                 android:text="Tel : "
                 android:textSize="18sp"
-                android:drawableLeft="@drawable/ic_place_white_24dp"
                 android:drawableTint="@color/material_red"
                 android:drawablePadding="5dp"
                 />

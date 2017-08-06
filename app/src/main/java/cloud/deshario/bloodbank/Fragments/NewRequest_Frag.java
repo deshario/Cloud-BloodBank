@@ -2,25 +2,22 @@ package cloud.deshario.bloodbank.Fragments;
 
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,17 +26,15 @@ import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import cloud.deshario.bloodbank.AbsRuntimePermission;
-import cloud.deshario.bloodbank.MainActivity;
 import cloud.deshario.bloodbank.R;
 
 /**
@@ -55,16 +50,13 @@ public class NewRequest_Frag extends Fragment {
         // Required empty public constructor
     }
 
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static String[] PERMISSIONS_STORAGE = {
-            Manifest.permission.READ_EXTERNAL_STORAGE,
+    private static final int CAMERA_STORAGE_PERM = 1;
+    public String[] PERMISSIONS_STORAGE = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.CAMERA
     };
-    private static final int REQUEST_PERMISSION = 10;
-    private static final int STORAGE_PERMISSION_CODE = 101;
-    private static final int MY_PERMISSION_REQUEST_COARSE_LOCATION = 102;
     private boolean permissionIsGranted = false;
+    List<String> listPermissionsNeeded;
 
 
     @Override
@@ -72,7 +64,7 @@ public class NewRequest_Frag extends Fragment {
         final View view = inflater.inflate(R.layout.new_request, container, false);
 
         CardView recyclerView = (CardView)view.findViewById(R.id.card_view);
-        int resId = R.anim.layout_animation_fall_down;
+        int resId = R.anim.layout_anim_slide;
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), resId);
         recyclerView.setLayoutAnimation(animation);
 
@@ -152,12 +144,14 @@ public class NewRequest_Frag extends Fragment {
     private void permission_work(Context context){
         boolean android_version = version_android();
         if(android_version == true){ // Android >= MARSHMALLOW
-            boolean access = checkPermission(context,PERMISSIONS_STORAGE[1]);
+//            boolean access = checkPermission(context,PERMISSIONS_STORAGE[1]);
+            boolean access = checkPermissions(PERMISSIONS_STORAGE);
             if(access == true){ // If Permission Granted
                 Toast.makeText(context,"Permission Already Granted",Toast.LENGTH_SHORT).show();
             }else{ // Ask Permission
-                request(context);
+                request(context,PERMISSIONS_STORAGE[1]);
             }
+
         }else{
             Toast.makeText(context, "Version > Marshmallow", Toast.LENGTH_SHORT).show();
             permissionIsGranted = true;
@@ -231,8 +225,10 @@ public class NewRequest_Frag extends Fragment {
 
 
 
-    private void request(Context context){
-        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+    private void request(Context context, String permission){
+//        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+        //requestPermissions(new String[]{permission}, STORAGE_PERMISSION_CODE);
+        requestPermissions(PERMISSIONS_STORAGE,CAMERA_STORAGE_PERM );
     }
 
     private static boolean version_android(){
@@ -243,31 +239,66 @@ public class NewRequest_Frag extends Fragment {
         }
     }
 
-    private static boolean checkPermission(Context context, String permission_name){
-        return ActivityCompat.checkSelfPermission(context, permission_name) == PackageManager.PERMISSION_GRANTED;
+//    private static boolean checkPermission(Context context, String[] permissions){
+//
+////        return ActivityCompat.checkSelfPermission(context, permissions) == PackageManager.PERMISSION_GRANTED;
+//       // return ActivityCompat.checkSelfPermission(context, PERMISSIONS_STORAGE) == PackageManager.PERMISSION_GRANTED;
+//
+//        for (String permission : permissions) {
+//            if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+//                return false;
+//            }
+//        }
+//    }
+
+    private boolean checkPermissions(String[] permissions) {
+        int result;
+        listPermissionsNeeded = new ArrayList<>();
+        for (String p:permissions) {
+            result = ContextCompat.checkSelfPermission(getActivity(),p);
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(p);
+            }
+        }
+        if (!listPermissionsNeeded.isEmpty()) { // denied permissions
+            requestPermissions(listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),CAMERA_STORAGE_PERM );
+            return false;
+        }
+        return true;
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        ArrayList<String> denied_per = new ArrayList<String>();
         switch (requestCode) {
-            case STORAGE_PERMISSION_CODE:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    permissionIsGranted = true;
-                    Toast.makeText(getActivity(),"permission granted",Toast.LENGTH_SHORT).show();
+            case CAMERA_STORAGE_PERM:
+                Map<String, Integer> perms = new HashMap<String, Integer>();
+                perms.put(Manifest.permission.WRITE_EXTERNAL_STORAGE, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.CAMERA, PackageManager.PERMISSION_GRANTED);
+                for (int i = 0; i < permissions.length; i++) {
+                    perms.put(permissions[i], grantResults[i]);
+                }
+                if (perms.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && perms.get(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    System.out.println("ALL PERMISSION GRANTED");
                 } else {
-                    permissionIsGranted = false;
+                    // Permission Denied
+                    System.out.println("SOME PERMISSION DENIED");
                     manual_permission(getActivity());
                 }
+
                 break;
+
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 
     public void manual_permission(Context context){
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-        dialog.setTitle("Enable Permission");
-        dialog.setIcon(R.drawable.user_male);
-        dialog.setMessage("Enable Permission Manually From Settings !");
+        dialog.setTitle("Permission Failed !");
+//        dialog.setMessage("Enable Permission Manually From Settings !");
         dialog.setPositiveButton("Enable", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

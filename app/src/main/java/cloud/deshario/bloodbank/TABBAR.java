@@ -1,5 +1,6 @@
 package cloud.deshario.bloodbank;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -96,7 +97,7 @@ public class TABBAR extends AppCompatActivity {
         );
         models5.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_close_white_36dp), Color.WHITE
+                        getResources().getDrawable(R.drawable.ic_mode_edit_white_24dp), Color.WHITE
                 ).build()
         );
         models5.add(
@@ -260,14 +261,14 @@ public class TABBAR extends AppCompatActivity {
         return status;
     }
 
-    private Drawable rotateDrawable(@DrawableRes int resId, int degree){
-        Bitmap bmpOriginal = BitmapFactory.decodeResource(getResources(), resId);
+    public static Drawable rotateDrawable(Context context, @DrawableRes int resId, int degree){
+        Bitmap bmpOriginal = BitmapFactory.decodeResource(context.getResources(), resId);
         Bitmap bmpResult = Bitmap.createBitmap(bmpOriginal.getHeight(), bmpOriginal.getWidth(), Bitmap.Config.ARGB_8888);
         Canvas tempCanvas = new Canvas(bmpResult);
         int pivot = bmpOriginal.getHeight() / 2;
         tempCanvas.rotate(degree, pivot, pivot);
         tempCanvas.drawBitmap(bmpOriginal, 0, 0, null);
-        Drawable drawable = new BitmapDrawable(getResources(), bmpResult);
+        Drawable drawable = new BitmapDrawable(context.getResources(), bmpResult);
         return drawable;
     }
 

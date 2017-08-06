@@ -3,7 +3,6 @@ package cloud.deshario.bloodbank.Fragments;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -49,7 +48,7 @@ public class Timeline_Frag extends Fragment {
 
         TimelineAdapter ca = new TimelineAdapter(createList(2));
         recyclerView.setAdapter(ca);
-        int resId = R.anim.layout_animation_fall_down;
+        int resId = R.anim.layout_anim_slide;
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), resId);
         recyclerView.setLayoutAnimation(animation);
 

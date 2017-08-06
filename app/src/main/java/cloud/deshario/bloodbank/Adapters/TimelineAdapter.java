@@ -5,7 +5,13 @@ package cloud.deshario.bloodbank.Adapters;
  */
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.support.annotation.DrawableRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +27,7 @@ import java.util.List;
 import cloud.deshario.bloodbank.Fragments.Timeline_Frag;
 import cloud.deshario.bloodbank.Models.Requester;
 import cloud.deshario.bloodbank.R;
+import cloud.deshario.bloodbank.TABBAR;
 
 public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ContactViewHolder> {
 
@@ -85,6 +92,12 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.Contac
             btn_reject =  (Button) view.findViewById(R.id.reject_btn);
             btn_navigate =  (Button) view.findViewById(R.id.navigate_btn);
 
+            Drawable drawable = TABBAR.rotateDrawable(context,R.drawable.ic_place_white_24dp,180);
+            bloodgroup.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+
+            Drawable phone = TABBAR.rotateDrawable(context,android.R.drawable.stat_sys_phone_call,60);
+            tel.setCompoundDrawablesWithIntrinsicBounds(phone, null, null, null);
+
             btn_opt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -131,5 +144,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.Contac
                 }
             });
         }
+
+
     }
 }
