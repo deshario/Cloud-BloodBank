@@ -312,18 +312,34 @@
 
                     </LinearLayout>
 
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="5dp">
+                        android:orientation="horizontal"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingBottom="8dp">
 
                         <Button
-                            android:id="@+id/request_btn"
-                            android:layout_width="match_parent"
+                            android:id="@+id/clear_form"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:background="@color/material_red"
+                            android:background="@drawable/rounded_corner"
+                            android:text="CLEAR "
+                            android:textColor="@color/default_bootstrap"
+                            android:textSize="18sp"/>
+
+
+                        <Button
+                            android:layout_marginLeft="5dp"
+                            android:id="@+id/request_btn"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/rounded_corner"
                             android:text="Request "
                             android:textColor="@color/default_bootstrap"
                             android:textSize="18sp" />

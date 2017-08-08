@@ -31,11 +31,11 @@
             android:id="@+id/location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Location : "
+            android:text=" Location : "
             android:textColor="@color/default_bootstrap"
             android:padding="10sp"
             android:textSize="18sp"
-            android:drawableLeft="@drawable/ic_place_white_24dp"/>
+            android:drawableLeft="@drawable/ic_map_white_24dp"/>
 
         <View
             android:layout_width="0dp"
@@ -103,6 +103,7 @@
                 android:text="Tel : "
                 android:textSize="18sp"
                 android:drawableTint="@color/material_red"
+                android:backgroundTint="@color/material_red"
                 android:drawablePadding="5dp"
                 />
 

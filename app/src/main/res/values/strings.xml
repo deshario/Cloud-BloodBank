@@ -58,7 +58,10 @@
 
     <string name="drawer_open">Open drawer</string>
     <string name="drawer_close">Close drawer</string>
-    <string name="msg">Please enable all permission</string>
+
+    <string name="explain_storage">This permission is required to upload the photos stored on your device.</string>
+
+    <string name="explain_camera">This permission is required to take pictures and record videos.</string>
 
 
 </resources>

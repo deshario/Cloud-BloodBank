@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Permission Denied !"
+        android:gravity="center"
+        android:textSize="22sp"
+        android:padding="10dp"
+        android:textColor="@color/material_red"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/material_red"/>
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/denied_title_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="External Storage"
+        android:textSize="20sp"
+        android:textColor="@color/primary_deshario"/>
+
+    <TextView
+        android:id="@+id/denied_data_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/explain_storage"
+        android:textSize="18sp"
+        android:textStyle="normal"
+        android:textColor="@color/f8"/>
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/denied_title_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Camera"
+        android:textSize="20sp"
+        android:textColor="@color/primary_deshario"/>
+
+    <TextView
+        android:id="@+id/denied_data_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/explain_camera"
+        android:textStyle="normal"
+        android:textSize="18sp"
+        />
+
+
+</LinearLayout>

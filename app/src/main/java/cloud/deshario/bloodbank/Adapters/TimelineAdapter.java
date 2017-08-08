@@ -8,10 +8,14 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.support.annotation.DrawableRes;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,9 +98,24 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.Contac
 
             Drawable drawable = TABBAR.rotateDrawable(context,R.drawable.ic_place_white_24dp,180);
             bloodgroup.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+            modify_tint(bloodgroup,context.getResources().getColor(R.color.material_red));
 
             Drawable phone = TABBAR.rotateDrawable(context,android.R.drawable.stat_sys_phone_call,60);
             tel.setCompoundDrawablesWithIntrinsicBounds(phone, null, null, null);
+            modify_tint(tel,context.getResources().getColor(R.color.material_red));
+
+            // android:drawabletint only works on Api 23 or higher
+            int api_version = Build.VERSION.SDK_INT;
+            if (api_version < 23) {
+                TextView[] textViews = {requester,bloodgroup,reason,tel};
+                modify_tint(textViews,context.getResources().getColor(R.color.material_red));
+                modify_tint(btn_accept,context.getResources().getColor(R.color.primary_deshario));
+                modify_tint(btn_reject,context.getResources().getColor(R.color.material_red));
+                modify_tint(btn_navigate,context.getResources().getColor(R.color.success_bootstrap));
+                modify_tint(location,context.getResources().getColor(R.color.default_bootstrap));
+            }
+
+
 
             btn_opt.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -145,6 +164,28 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.Contac
             });
         }
 
+        private void modify_tint(TextView[] textViews, int color){
+            for(int i=0; i<textViews.length; i++){
+                Drawable[] drawables = textViews[i].getCompoundDrawables();
+                if (drawables[0] != null) {  // left drawable
+                    drawables[0].setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+                }
+            }
+        }
+
+        private void modify_tint(Button button, int color){
+            Drawable[] drawables = button.getCompoundDrawables();
+            if (drawables[0] != null) {  // left drawable
+                drawables[0].setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+            }
+        }
+
+        public void modify_tint(TextView textView, int color){
+            Drawable[] drawables = textView.getCompoundDrawables();
+            if (drawables[0] != null) {  // left drawable
+                drawables[0].setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+            }
+        }
 
     }
 }
